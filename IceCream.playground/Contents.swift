@@ -27,15 +27,34 @@
  ## Instructions
  
  In order to help Mark, you should first create a `Dictionary` to map the names of the party attendees to their preferred flavor of ice cream. Please create that mapping in a variable named `favoriteFlavorsOfIceCream` below: */
-// declare `favoriteFlavorsOfIceCream` here
-
+var favoriteFlavorsOfIceCream = [
+    "Joe": "Peanut Butter and Chocolate",
+    "Tim": "Natural Vanilla",
+    "Sophie": "Mexican Chocolate",
+    "Deniz": "Natural Vanilla",
+    "Tom": "Mexican Chocolate",
+    "Jim": "Natural Vanilla",
+    "Mark": "Cookies 'N' Cream"
+]
 /*: directions2
  
  Good! Below, the function `namesForIceCreamFlavor(_:)` has been declared for you, but has no useful body. Fill in the body of `namesForIceCreamFlavor(_:)` to return the name of everyone who likes that particular flavor of ice cream. */
 func namesForIceCreamFlavor(flavor: String) -> [String] {
-    // write your code here
-    return []    // DELETE THIS LINE
+    var namesForEach: [String] = [] // create a new variable to append the names to
+    
+    for (names, flavors) in favoriteFlavorsOfIceCream {
+        if flavors == flavor {
+            namesForEach.append(names)
+        }
+    }
+    
+    return namesForEach
+    
 }
+
+print(namesForIceCreamFlavor("Natural Vanilla"))
+
+
 
 /*: directions3
  
@@ -53,8 +72,10 @@ assert(names == [], "\(names)")
  
  Mark also needs a function that returns the _number_ of people who like a certain type of ice cream. Finish implementing `countForIceCreamFlavor(_:)` below to return the number of people who like a particular flavor of ice cream. */
 func countForIceCreamFlavor(flavor: String) -> Int {
-    // write your code here
-    return -1    // DELETE THIS LINE
+    
+    return namesForIceCreamFlavor(flavor).count
+
+
 }
 
 /*: directions5
@@ -73,9 +94,18 @@ assert(count == 0, "\(count)")
  
  Good! Mark also needs a function to find out who likes a particular flavor of ice cream, so he doesn't make mistakes when he's serving ice cream at the party. Complete the function `iceCreamForPerson(_:)` below to return a particular attendee's favorite flavor of ice cream. If a given person doesn't have a favorite flavor of ice cream (or doesn't even exist), return `nil`. */
 func iceCreamForPerson(name: String) -> String? {
-    // write your code here
-    return nil    // DELETE THIS LINE
-}
+
+    if let flavor = favoriteFlavorsOfIceCream[name] {
+            return flavor
+        }
+        else {
+            return nil
+        }
+    }
+iceCreamForPerson("Mark")
+
+    
+
 
 /*: directions7
  
@@ -106,8 +136,22 @@ if let iceCream = iceCream {
  
  Mark made it to the store, but Tim decided that he doesn't want Natural Vanilla. He wants Pistachio instead. He texted Mark to change his mind. Mark should've left his phone at home! Now he needs you write a function, `replaceFlavor(_:forPerson:)`, that will change the given person's preferred ice cream flavor to a new one. Return `true` if the person's preferred flavor was changed, or `false` if it was not. If the person has not even RSVP'ed to the party, do nothing but return `false`. Implement the body of this function below. */
 func replaceFlavor(flavor: String, forPerson person: String) -> Bool {
-    // write your code here
-    return false    // DELETE THIS LINE
+//    to change a flavor: call on the function
+//    let newTim = favoriteFlavorsOfIceCream["Tim"] = "Pistachio"
+    
+    let keys = favoriteFlavorsOfIceCream.keys
+    
+    if !keys.contains(person) {
+        return false
+
+    } else if flavor != favoriteFlavorsOfIceCream[person] {
+        favoriteFlavorsOfIceCream[person] = flavor
+        return true
+    }
+    else {
+        return false
+    }
+    
 }
 
 /*: directions9
@@ -147,8 +191,14 @@ if let iceCream = iceCream {
  
  Uh oh! Deniz just texted Mark to let her know she can't come to the party. Finish the function `removePerson(_:)` below so that Deniz is removed from the guest list and Mark doesn't accidentally buy ice cream for her. The function should return `true` if the person who is being removed had previously been attending the party, and `false` if they were never attending in the first place. */
 func removePerson(name: String) -> Bool {
-    // write your code here
-    return false    // DELETE THIS LINE
+    let keys = favoriteFlavorsOfIceCream.keys
+    
+    if keys.contains(name) {
+        favoriteFlavorsOfIceCream[name] = nil
+        return true
+    } else {
+        return false
+    }
 }
 
 /*: directions10
@@ -172,8 +222,10 @@ assert(!removed, "\(removed)")
  
  Mark is having trouble keeping track of all the comings and goings of the party. Complete the function `numberOfAttendees()` below that will return the number of people coming to the ice cream party. */
 func numberOfAttendees() -> Int {
-    // write your code here
-    return -1    // DELETE THIS LINE
+   
+    return favoriteFlavorsOfIceCream.keys.count
+    
+
 }
 
 /*: directions12
@@ -188,9 +240,19 @@ assert(attendees == 6, "\(attendees)")
  
  Mark is just getting ready to leave the grocery store when Sophie texts him to ask if her friend Travis can come to the party, too. She says his favorite flavor of ice cream is Strawberry. Now Mark needs you to write a function to add a new person to the guest list, along with their favorite flavor of ice cream. Complete the `addPerson(_:withFlavor:)` function below to add a person and their favorite flavor of ice cream to the guest list. The function should return `true` if the person was added, or `false` if the person was already attending. If the person was already attending, their favorite flavor of ice cream should _not_ be updated, and `false` should be returned instead. */
 func addPerson(name: String, withFlavor flavor: String) -> Bool {
-    // write your code here
-    return false    // DELETE THIS LINE
+    
+    // if a new person was added, update what their favorite flavor is and return true
+    // if a person already exists, don't update their flavor and return false
+  
+    
+    if favoriteFlavorsOfIceCream.keys.contains(name) {
+        return false
+    } else {
+        favoriteFlavorsOfIceCream[name] = flavor
+        return true
+    }
 }
+
 
 /*: directions14
  
@@ -221,7 +283,9 @@ if let iceCream = iceCream {
  
  Excellent! If Mark's notes and memory are correct, there are now 7 people coming to the party. He'd like you to write a function, `printAttendees()`, which will print "<Name> likes <Ice Cream>", one attendee per line, just so he can make sure he remembers correctly. */
 func printAttendees() {
-    // write your code here
+    for (name, flavor) in favoriteFlavorsOfIceCream {
+        print ("\(name) likes \(flavor)")
+    }
 }
 
 /*: directions16
